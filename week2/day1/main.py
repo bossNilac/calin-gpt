@@ -1,5 +1,4 @@
 def text_to_bytes(text):
-    print(text)
     return text.encode('utf-8')
 
 
