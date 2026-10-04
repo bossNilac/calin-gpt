@@ -114,7 +114,6 @@ def encode_bpe(text_, merges_):
     return output
 
 if __name__ == "__main__":
-    # Test 1: simple known merge
     merges = {
         (97, 98): 256
     }
@@ -123,7 +122,6 @@ if __name__ == "__main__":
     assert encode_bpe("abab", merges) == [256, 256]
 
 
-    # Test 2: multiple merge levels
     merges = {
         (97, 98): 256,
         (256, 256): 257
@@ -133,20 +131,16 @@ if __name__ == "__main__":
     assert encode_bpe("ababab", merges) == [257, 256]
 
 
-    # Test 3: merge only where applicable
     assert encode_bpe("abxabab", merges) == [256, 120, 257]
 
 
-    # Test 4: nothing matches
     assert encode_bpe("xyz", merges) == [120, 121, 122]
 
 
-    # Test 5: empty / one character
     assert encode_bpe("", merges) == []
     assert encode_bpe("a", merges) == [97]
 
 
-    # Test 6: unseen Unicode should still work as raw byte tokens
     unicode_tokens = encode_bpe("🙂", merges)
     assert unicode_tokens == encode("🙂")
 
