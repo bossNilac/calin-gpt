@@ -1,8 +1,5 @@
 from week2.day1.main import encode, text_to_bytes, bytes_to_token_ids
 import time
-
-
-
 def init_vocab():
     v = {}
 
@@ -113,3 +110,17 @@ if __name__ == '__main__':
 #
 # Training time: 0.09008264833026462  for vocab size:  300
 # ++++++++++++++++++++++++++++++++++++++++++
+
+# Initial token count: 23613149
+# Final token count: 9033763
+# Number of learned tokens: 500
+#
+# Training time: 0.3649727411402596  for vocab size:  500
+# ++++++++++++++++++++++++++++++++++++++++++=
+
+# Initial token count: 23613149
+# Final token count: 4326438
+# Number of learned tokens: 1000
+#
+# Training time: 0.6388726145029068  for vocab size:  1000
+# ++++++++++++++++++++++++++++++++++++++++++=
