@@ -1,3 +1,5 @@
+from math import sqrt
+
 import torch
 
 
@@ -31,3 +33,16 @@ def calculate_qkv(x, wq, wk, wv):
 # Q: What information am I looking for?
 # K: What information can I be matched on?
 # V: What information do I provide?
+
+
+#  Z = softmax(QK^T/ sqrt(D)) * V
+# (QK^T) Calculate compatibility scores between tokens.
+# Divide by (sqrt D): Prevent scores from becoming too large, which could make softmax overly concentrated and gradients small.
+# Softmax: Convert scores into attention weights that sum to 1 across each row.
+# Multiply by V: Create contextualized token representations.
+
+
+def scaled_dot_product_attention(q, k, v):
+    D = q.shape[-1]
+    k_transpose = k.transpose(-2, -1)
+    return torch.softmax(torch.matmul(q, k_transpose,).div(sqrt(D)),dim=-1).matmul(v)
