@@ -46,3 +46,17 @@ def scaled_dot_product_attention(q, k, v):
     D = q.shape[-1]
     k_transpose = k.transpose(-2, -1)
     return torch.softmax(torch.matmul(q, k_transpose,).div(sqrt(D)),dim=-1).matmul(v)
+
+
+def masked_scaled_dot_product_attention(q, k, v):
+    D = q.shape[-1]
+    k_transpose = k.transpose(-2, -1)
+
+    T = q.shape[-2]
+    mask = torch.tril(torch.ones(T, T, device=q.device))
+    S = torch.matmul(q, k_transpose,).div(sqrt(D))
+    S = S.masked_fill(mask == 0, float("-inf"))
+
+    return torch.softmax(S,dim=-1).matmul(v)
+
+# mask the 'reading from feature' values so that you don't read them while getting the attention scores.
