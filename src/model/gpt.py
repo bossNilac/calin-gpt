@@ -7,16 +7,19 @@ from src.model.layers import LayerNorm
 
 
 class GPT(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config, vocab_size = None):
         super().__init__()
-        self.token_emb=nn.Embedding(config.vocab_size, config.d_model)
+
+        vocab_size = config.vocab_size if vocab_size is None else vocab_size
+
+        self.token_emb=nn.Embedding(vocab_size, config.d_model)
         self.pos_emb=nn.Embedding(config.context_length, config.d_model)
         self.blocks = nn.ModuleList([
             TransformerBlock(config.d_model, config.n_heads)
             for _ in range(config.n_layers)
         ])
         self.final_norm = LayerNorm(config.d_model)
-        self.lm_head = nn.Linear(config.d_model, config.vocab_size)
+        self.lm_head = nn.Linear(config.d_model, vocab_size)
 
     def forward(self, idx, targets=None):
         B, T = idx.shape

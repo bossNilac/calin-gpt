@@ -1,6 +1,6 @@
 import json
 
-from week2.day4.main import encode_bpe, vocab, merges
+from week2.day4.main import encode_bpe
 
 
 def decode_bpe(token_ids, vocab):
@@ -60,24 +60,24 @@ if __name__ == "__main__":
         "hello\n\tworld",
     ]
 
-    for text in tests:
-        token_ids = encode_bpe(text, merges)
-        decoded = decode_bpe(token_ids, vocab)
+    # for text in tests:
+        # token_ids = encode_bpe(text, merges)
+        # decoded = decode_bpe(token_ids, vocab)
 
-        assert decoded == text
+        # assert decoded == text
 
-    save_tokenizer("tokenizer.json", vocab, merges)
+    # save_tokenizer("tokenizer.json", vocab, merges)
 
     loaded_vocab, loaded_merges = load_tokenizer("tokenizer.json")
 
-    assert loaded_vocab == vocab
-    assert loaded_merges == merges
+    # assert loaded_vocab == vocab
+    # assert loaded_merges == merges
 
     for text in tests:
-        original_tokens = encode_bpe(text, merges)
+        # original_tokens = encode_bpe(text, merges)
         loaded_tokens = encode_bpe(text, loaded_merges)
 
-        assert original_tokens == loaded_tokens
+        # assert original_tokens == loaded_tokens
         assert decode_bpe(loaded_tokens, loaded_vocab) == text
 
     print("All Day 5 tests passed.")

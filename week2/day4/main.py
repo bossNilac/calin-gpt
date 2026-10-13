@@ -1,15 +1,7 @@
-from week2.day1.main import encode
-from week2.day3.main import extend_vocab, init_vocab, merge_pair
-
-with open('text.txt', 'r', encoding = 'utf-8') as f:
-    train_text =  f.read()
-    vocab = init_vocab()
-    tokens, merges = extend_vocab(train_text, 300, vocab)
-
-
 import heapq
 
 from week2.day1.main import encode
+from week2.day3.main import extend_vocab, init_vocab
 
 
 def encode_bpe(text_, merges_):
@@ -114,6 +106,11 @@ def encode_bpe(text_, merges_):
     return output
 
 if __name__ == "__main__":
+    with open('text.txt', 'r', encoding='utf-8') as f:
+        train_text = f.read()
+        vocab = init_vocab()
+        tokens, merges = extend_vocab(train_text, 300, vocab)
+
     merges = {
         (97, 98): 256
     }
