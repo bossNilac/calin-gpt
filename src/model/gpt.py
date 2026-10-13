@@ -31,19 +31,38 @@ class GPT(nn.Module):
             out = block(out)
 
         out = self.final_norm(out)
-        out = self.lm_head(out)
+        logits = self.lm_head(out)
 
-        return out
+        if targets is None:
+            return logits
+
+        b, t, v = logits.shape
+        logits_flat = logits.reshape(b * t, v)
+        targets_flat = targets.reshape(b * t)
+
+        loss = torch.nn.functional.cross_entropy(logits_flat, targets_flat)
+
+        return logits, loss
 
 if __name__ == "__main__":
-    config = GPTConfig(vocab_size=300, n_layers=2)
+    config = GPTConfig(vocab_size=300)
     model = GPT(config)
+    x = torch.randint(0, 300, (2, 16))
+    y = torch.randint(0, 300, (2, 16))
 
-    idx = torch.randint(0, 300, (2, 16))
-    logits = model(idx)
+    logits, loss = model(x, y)
 
     print("Logits shape:", logits.shape)
-    print("Expected shape:", (2, 16, 300))
-    print("Shapes match:", logits.shape == (2, 16, 300))
+    print("Loss:", loss.item())
+    print("Loss is finite:", torch.isfinite(loss).item())
     print("Number of blocks:", len(model.blocks))
     print("Trainable parameters:", sum(p.numel() for p in model.parameters() if p.requires_grad))
+
+    loss.backward()
+
+    print("Embedding gradients:", model.token_emb.weight.grad is not None)
+    print("LM head gradients:", model.lm_head.weight.grad is not None)
+    print("All gradients finite:", all(
+        p.grad is not None and torch.isfinite(p.grad).all().item()
+        for p in model.parameters() if p.requires_grad
+    ))
