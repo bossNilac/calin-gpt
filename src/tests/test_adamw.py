@@ -27,3 +27,5 @@ for step in range(10):
 print("Custom parameters:", p1.detach())
 print("PyTorch parameters:", p2.detach())
 print("Match:", torch.allclose(p1, p2, atol=1e-6))
+
+assert torch.allclose(p1, p2, atol=1e-6)
