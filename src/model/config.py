@@ -7,3 +7,4 @@ class GPTConfig:
     n_layers: int = 2
     n_heads: int = 4
     d_model: int = 128
+    mlp_ratio: int = 4

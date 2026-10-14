@@ -6,12 +6,12 @@ from week3.day6.main import MultiheadAttention
 
 
 class TransformerBlock(nn.Module):
-    def __init__(self, d_model, n_heads):
+    def __init__(self, d_model, n_heads, mlp_ratio=4):
         super().__init__()
         self.layer_norm1 = LayerNorm(d_model)
         self.multihead_attn = MultiheadAttention(d_model, n_heads)
         self.layer_norm2 = LayerNorm(d_model)
-        self.mlp = MLP(d_model)
+        self.mlp = MLP(d_model, mlp_ratio)
 
     def forward(self, x):
         normalised = self.layer_norm1(x)
