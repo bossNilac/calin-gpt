@@ -1,0 +1,22 @@
+{
+  "model": {
+    "context_length": 64,
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_model": 128
+  },
+  "training": {
+    "batch_size": 2,
+    "context_length": 16,
+    "max_steps": 200,
+    "max_lr": 0.001,
+    "min_lr": 0.0001,
+    "warmup_steps": 20,
+    "grad_clip": 1.0,
+    "eval_interval": 25,
+    "save_interval": 50,
+    "eval_batches": 10,
+    "weight_decay": 0.01
+  },
+  "checkpoint_dir": "src/checkpoints/debug"
+}

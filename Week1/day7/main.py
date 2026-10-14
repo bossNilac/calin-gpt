@@ -64,7 +64,7 @@ def split_dataset(input_, train_ratio, test_ratio, valid_ratio):
     test_set_ = input_[train_end:test_end]
     valid_set_ = input_[test_end:]
 
-    return train_set_, test_set, valid_set_
+    return train_set_, test_set_, valid_set_
 
 def x_y_batches(in_, b, t):
     last_index = len(in_) - 1 - t
@@ -76,7 +76,7 @@ def x_y_batches(in_, b, t):
         output_x.append(in_[random_stop:random_stop + t])
         output_y.append(in_[random_stop + 1:random_stop + 1 + t])
 
-    return torch.tensor(output_x),torch.tensor(output_y)
+    return torch.tensor([list(row) for row in output_x], dtype=torch.long), torch.tensor([list(row) for row in output_y], dtype=torch.long)
 
 def create_table(voc, c):
     tensor = torch.rand(size=(len(voc), c))

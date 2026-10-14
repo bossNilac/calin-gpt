@@ -1,0 +1,112 @@
+{
+  "model": {
+    "vocab_size": 4096,
+    "context_length": 256,
+    "n_layers": 8,
+    "n_heads": 6,
+    "d_model": 384,
+    "mlp_ratio": 4
+  },
+  "training": {
+    "batch_size": 2,
+    "accumulation_steps": 16,
+    "max_steps": 10000,
+    "max_lr": 0.0003,
+    "min_lr": 3e-05,
+    "warmup_steps": 200,
+    "grad_clip": 1.0,
+    "eval_interval": 100,
+    "save_interval": 100,
+    "eval_batches": 10,
+    "weight_decay": 0.1,
+    "resume": true
+  },
+  "data": {
+    "processed_dir": "data/processed",
+    "tokenizer_path": "data/processed/tokenizer.json",
+    "cache_dir": "data/cache",
+    "target_tokens": 20000000,
+    "mixture": {
+      "fineweb": 0.45,
+      "wikitext": 0.35,
+      "gutenberg": 0.2
+    },
+    "validation_ratio": 0.05,
+    "seed": 42,
+    "tokenizer_train_chars": 300000,
+    "max_document_chars": 2000000,
+    "max_source_documents": 200000,
+    "gutenberg_delay": 2,
+    "gutenberg_mirror": "https://gutenberg.pglaf.org",
+    "gutenberg_ids": [
+      1342,
+      11,
+      1661,
+      84,
+      2701,
+      98,
+      1400,
+      345,
+      174,
+      1260,
+      768,
+      74,
+      76,
+      120,
+      1232,
+      205,
+      2600,
+      1184,
+      4300,
+      135,
+      2814,
+      158,
+      161,
+      141,
+      145,
+      514,
+      55,
+      16328,
+      36,
+      35,
+      215,
+      829,
+      1998,
+      25344,
+      730,
+      46,
+      28054,
+      1727,
+      408,
+      203,
+      244,
+      209,
+      105,
+      1257
+    ],
+    "hf": {
+      "fineweb": {
+        "repo": "HuggingFaceFW/fineweb-edu",
+        "config": "sample-10BT",
+        "revision": "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9"
+      },
+      "wikitext": {
+        "repo": "Salesforce/wikitext",
+        "config": "wikitext-103-raw-v1",
+        "revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+      }
+    }
+  },
+  "runtime": {
+    "device": "cuda",
+    "mixed_precision": "none",
+    "compile": false,
+    "threads": 1
+  },
+  "checkpoint_dir": "checkpoints/final",
+  "generation": {
+    "prompt": "Once upon a time",
+    "max_new_tokens": 100,
+    "temperature": 0.8
+  }
+}
