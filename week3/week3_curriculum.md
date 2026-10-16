@@ -1,12 +1,31 @@
 # Week 3 — Causal Self-Attention and Multi-Head Attention
 
+These are my attention exercises from before I assembled the full GPT.
+See the [architecture notes](../docs/architecture.md) and
+[project history](../docs/development.md) for the later model.
+
+## Where the Code Is
+
+| Stage | Code |
+| --- | --- |
+| Days 1-4 (combined) | [Aggregation, Q/K/V, scaling, masking](day1_2_3_4/main.py) |
+| Day 5 | [Trainable single head](day5/main.py) |
+| Day 6 | [Vectorized multi-head attention](day6/main.py) |
+| Day 7 | [Validation checks](day7/main.py) |
+
+Run these modules from the repository root, for example
+`python -m week3.day6.main` or `python -m week3.day7.main`.
+The current GPT imports Day 6 attention directly. The optional visualization
+below requires Matplotlib, which is not in `requirements.txt`.
+
 ## Overview
 
-This week builds the attention mechanism that will become the core of a decoder-only GPT. The exercises progress from simple weighted aggregation to a trainable, vectorized multi-head causal self-attention module in PyTorch.
+This week I worked from simple weighted sums up to multi-head causal attention.
+That attention code is now used by the GPT under `src/`.
 
 **Prerequisites:** Python, basic PyTorch tensor operations, matrix multiplication, embeddings, and the tokenization work from Weeks 1–2.
 
-**By the end of the week, you should be able to:**
+**What I wanted to understand:**
 
 - Explain why a token needs information from other tokens in its context.
 - Derive and implement scaled dot-product attention.
@@ -276,6 +295,10 @@ Token embeddings X              [B, T, C]
 
 ### What's next?
 
-Attention is one component of a GPT Transformer block. The next stage is to integrate it with **positional embeddings, layer normalization, residual connections, and a feed-forward network**, then stack Transformer blocks and train a decoder-only language model.
+Attention is one component of a GPT Transformer block. The next stage in the original plan was to integrate it with **positional embeddings, layer normalization, residual connections, and a feed-forward network**, then stack Transformer blocks and train a decoder-only language model.
 
-> This curriculum is intended both as a record of the implementation journey and as a reproducible set of exercises for anyone building a small GPT from scratch. Implement each stage yourself before consulting a reference implementation.
+> That integration now exists in [src/model/](../src/model/); use the
+> [training guide](../docs/training.md) for current commands.
+>
+> I kept these exercises to show the learning process. Try each stage yourself
+> before looking at my implementation.

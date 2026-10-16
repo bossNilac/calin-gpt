@@ -1,5 +1,9 @@
 # Week 2 — Day 5: Decoding and Persistence
 
+My notes for [this day's code](main.py).
+See the [week-two plan](../week2_curriculum.md) for the files and
+the [architecture notes](../../docs/architecture.md) for how I used this later.
+
 ## Goal
 
 Complete the tokenizer by supporting:
@@ -43,7 +47,7 @@ token IDs
 The tokenizer must satisfy:
 
 ```text
-decode_bpe(encode_bpe(text)) == text
+decode_bpe(encode_bpe(text, merges), vocab) == text
 ```
 
 for arbitrary valid UTF-8 text.

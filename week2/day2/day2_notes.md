@@ -1,5 +1,9 @@
 # Week 2 — Day 2: BPE Basics
 
+My notes for [this day's code](main.py).
+See the [week-two plan](../week2_curriculum.md) for the files and
+the [architecture notes](../../docs/architecture.md) for how I used this later.
+
 ## Core idea
 
 BPE repeatedly merges the most frequent adjacent token pair.
@@ -77,18 +81,21 @@ because the middle `1` cannot be used twice.
 ## Tokenizer training vs model training
 
 Tokenizer training:
+
 - counts frequencies
 - creates merge rules
 - uses normal Python data structures
 - no gradients or PyTorch required
 
 Model training:
+
 - learns neural-network weights
 - uses loss, gradients, and optimization
 
 ## Vocabulary size
 
 Larger vocabulary:
+
 - usually reduces token sequence length
 - increases embedding/output vocabulary size
 - can overfit/memorize a small training corpus

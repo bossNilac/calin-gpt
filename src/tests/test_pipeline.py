@@ -66,6 +66,10 @@ class PipelineTests(unittest.TestCase):
         body = 'This is an English paragraph with punctuation, and a second sentence. ' * 3
         raw = 'license\n*** START OF THE PROJECT GUTENBERG EBOOK TEST ***\n' + body + '\n*** END OF THE PROJECT GUTENBERG EBOOK TEST ***\nlicense'
         self.assertEqual(clean_text(strip_gutenberg(raw)), body.strip())
+        wrapped = ('license\n*** START OF THE PROJECT GUTENBERG EBOOK A WRAPPED\n'
+                   'TITLE ***\n' + body + '\n*** END OF THE PROJECT GUTENBERG EBOOK A WRAPPED\n'
+                   'TITLE ***\nlicense')
+        self.assertEqual(clean_text(strip_gutenberg(wrapped)), body.strip())
         with self.assertRaises(ValueError):
             strip_gutenberg('unrecognized wrapper')
         self.assertEqual(clean_text('bad\x00text'), '')

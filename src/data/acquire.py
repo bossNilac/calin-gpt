@@ -23,8 +23,8 @@ def clean_text(text):
 
 
 def strip_gutenberg(text):
-    start = re.search(r'\*\*\* START OF (?:THE|THIS) PROJECT GUTENBERG.*?\*\*\*', text, re.I)
-    end = re.search(r'\*\*\* END OF (?:THE|THIS) PROJECT GUTENBERG.*?\*\*\*', text, re.I)
+    start = re.search(r'\*\*\* START OF (?:THE|THIS) PROJECT GUTENBERG.*?\*\*\*', text, re.I | re.S)
+    end = re.search(r'\*\*\* END OF (?:THE|THIS) PROJECT GUTENBERG.*?\*\*\*', text, re.I | re.S)
     if not start or not end or end.start() <= start.end():
         raise ValueError('Gutenberg header/footer markers missing')
     return text[start.end():end.start()]

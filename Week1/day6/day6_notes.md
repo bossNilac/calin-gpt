@@ -1,5 +1,9 @@
 # Day 6 Notes — Autoregressive Generation
 
+These are my notes for [this day's code](main.py).
+The numbers and limitations below belong to this early exercise, not the later GPT.
+See the [week-one plan](../week1_curriculum_exercises.md).
+
 ## 1. What generation does
 
 Training and generation use the same model, but differently.
@@ -175,7 +179,7 @@ Sampling therefore produces more varied output than greedy decoding.
 
 ---
 
-## 7. Why softmax is needed before multinomial
+## 7. Why this model applies softmax before multinomial
 
 Logits are raw scores.
 
@@ -184,7 +188,9 @@ They are not probabilities and do not necessarily:
 - lie between 0 and 1
 - sum to 1
 
-Softmax converts them into a probability distribution.
+Softmax converts them into a probability distribution. `torch.multinomial` also
+accepts unnormalized nonnegative weights; raw logits can be negative, so they
+cannot be passed directly as sampling weights.
 
 ```text
 (V,) logits
@@ -273,7 +279,7 @@ That is what will allow longer-range coherence.
 
 ---
 
-# Full Generation Flow
+## Full Generation Flow
 
 ```text
 starting character
@@ -312,7 +318,7 @@ decode token IDs back into text
 
 ---
 
-# What I Should Be Able to Explain
+## What I Should Be Able to Explain
 
 - What autoregressive generation means.
 - Why generation happens one token at a time.

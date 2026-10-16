@@ -1,3 +1,8 @@
+# Week 1, Day 3: Batches and Splits
+
+My notes for [Day 3](main.py). I rewrote the helper on Day 7, and that is the
+version the [current data loader](../../src/data/dataset.py) uses.
+
 ## Things I should now be able to explain
 - \(B\): number of sequences sampled together.
 - \(T\): number of tokens per sequence.

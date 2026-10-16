@@ -1,5 +1,9 @@
 # Day 5 Notes — Backpropagation, Gradients, Optimization, Validation
 
+These are my notes for [this day's code](main.py).
+The numbers and limitations below belong to this early exercise, not the later GPT.
+See the [week-one plan](../week1_curriculum_exercises.md).
+
 ## 1. What the model learns
 
 The trainable parameters in the current model are:
@@ -251,7 +255,7 @@ The two losses staying fairly close suggests no obvious overfitting in this shor
 
 ---
 
-# Important limitation of the current model
+## Important limitation of the current model
 
 The current model processes every token independently:
 
@@ -271,7 +275,7 @@ Attention later will allow positions to communicate and use longer context.
 
 ---
 
-# What I Should Be Able to Explain
+## What I Should Be Able to Explain
 
 - What a trainable parameter is.
 - Why the embedding table and output weight matrix are parameters.

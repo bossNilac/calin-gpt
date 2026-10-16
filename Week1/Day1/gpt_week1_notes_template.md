@@ -1,53 +1,32 @@
-# GPT From Scratch — Week 1 Notes
+# Week 1, Day 1: Character Transition Notes
 
-## Day 1
+My notes for [Day 1](main.py). This was the first predictor, before the
+[current GPT](../../README.md).
 
-### Goal
+## Goal and Implementation
 
-- design a simple token predictor by calculating the probabilties of 2 chars being next to each other.
+Build a letter-by-letter predictor by counting adjacent character pairs in the
+local `sample` file and normalizing counts into conditional probabilities.
 
-### Concepts
+## Observation
 
-- next character text generation
+In my local experiment, prediction tended toward repeating "the", following
+strong transitions in the sample. This is an observation from that exercise,
+not a benchmark of the later language model.
 
-### Key Math
+## Conditional Probability
 
-- simple probability theory
+`P(a | b)` is the probability of the next character being `a`, given current
+character `b`. Estimate it by dividing the count of pair `(b, a)` by the total
+count of pairs starting with `b`.
 
+## What I Should Be Able to Explain
 
-### What I Implemented
+- Why counting pairs gives a next-character distribution.
+- Why the outgoing probabilities for an observed character sum to one.
+- Why greedy prediction can repeat a short cycle.
+- Why a single-character transition model cannot use longer context.
 
-- 
+## Open Questions and Later Ideas
 
-### What I Observed
-
-- when letting this psedo-model run by itself it incline to the word the because that is the only sequence in the sample test that has a very high probability.
-
-### Things I Should Now Be Able to Explain
-
-- Probability theory behinf the "ai's" decision'
-
-### Things I Am Still Shaky On
-
-- None
-
-### Day Summary
-In my own words:
-
-> Simple letter by letter text predictor based on sample text.
-
-## Useful Formulas
-
-### Conditional Probability
-
-P(a | b) probability of a happening given b happened
-
-### Next-Token Prediction
-
-Based on P (a | b) which is normalised to 1 by deviding the count of the pair (b,a) by all the pairs who start with b
-
----
-
-
-## Ideas for Later
-- None today
+None recorded at this stage.

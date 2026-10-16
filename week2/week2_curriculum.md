@@ -1,5 +1,33 @@
 # Week 2 — Byte-Level BPE Tokenization
 
+This is the plan I followed for my BPE tokenizer. I kept the exercises so other
+people can try them too. They are a study plan, not a list of measured results.
+See the [architecture notes](../docs/architecture.md) and [README](../README.md).
+
+## Code and Files
+
+| Stage | Code |
+| --- | --- |
+| Day 1 | [UTF-8 byte conversion](day1/main.py) |
+| Day 2 | [Pair counting and merging](day2/main.py) |
+| Day 3 | [Vocabulary training](day3/main.py) |
+| Day 4 | [Heap-based encoder](day4/main.py) |
+| Day 5 | [Decoding and persistence](day5/main.py) |
+| Day 6 | [Benchmark exercise](day6/benchmark.py) |
+| Day 7 | [Character-model integration with BPE](day7/main.py) |
+
+Several scripts open `text.txt` or `tokenizer.json` relative to the working
+directory. Keep the repository root on `PYTHONPATH` when running from a day
+directory. The Day 6 benchmark expects `bpe_benchmark_corpus.txt`, which is not
+tracked: supply your own UTF-8 corpus at that path or change its input path before
+running it. The tracked Day 3 input is `day3/bpe_benchmark_corpus_utf8.srt`;
+it is subtitle-formatted material, not the missing Day 6 corpus.
+
+The Day 4 example below uses a simple encoder. My current encoder uses a heap
+to follow merge priorities and update nearby pairs. Day 3 training still scans
+the sequence for every merge, so a fast scan does not make the whole training
+process linear-time.
+
 ## Goal
 
 Build a byte-level Byte Pair Encoding tokenizer from scratch and integrate it into the language-model pipeline from Week 1.
@@ -22,9 +50,9 @@ The focus is understanding how tokenization works internally rather than using a
 
 ---
 
-## Learning Objectives
+## What I Wanted to Learn
 
-By the end of Week 2, you should be able to explain:
+By the end, I wanted to explain:
 
 - characters vs Unicode code points vs bytes vs token IDs
 - how UTF-8 represents text
@@ -43,7 +71,7 @@ By the end of Week 2, you should be able to explain:
 
 ---
 
-# Day 1 — Text Representation
+## Day 1 — Text Representation
 
 Study:
 
@@ -81,7 +109,7 @@ Test ASCII, whitespace, accented characters, non-English text, and emojis.
 
 ---
 
-# Day 2 — BPE Fundamentals
+## Day 2 — BPE Fundamentals
 
 Study the BPE merge process manually.
 
@@ -123,7 +151,7 @@ Understand why the token sequence must be rescanned after every merge.
 
 ---
 
-# Day 3 — BPE Training
+## Day 3 — BPE Training
 
 Build the complete BPE training loop.
 
@@ -175,7 +203,7 @@ Also improve the naive implementation by avoiding unnecessary sorting and interm
 
 ---
 
-# Day 4 — Encoding New Text
+## Day 4 — Encoding New Text
 
 Use the learned merge rules to tokenize unseen text.
 
@@ -222,7 +250,7 @@ Understand why merge priority matters.
 
 ---
 
-# Day 5 — Decoding and Persistence
+## Day 5 — Decoding and Persistence
 
 Implement BPE decoding.
 
@@ -258,7 +286,7 @@ Verify that saving and loading does not change tokenizer behavior.
 
 ---
 
-# Day 6 — Evaluation
+## Day 6 — Evaluation
 
 Train and evaluate the tokenizer on a larger corpus.
 
@@ -307,7 +335,7 @@ Understand that larger vocabularies usually reduce sequence length but increase 
 
 ---
 
-# Day 7 — Language Model Integration
+## Day 7 — Language Model Integration
 
 Replace the Week 1 tokenizer with the BPE tokenizer.
 
@@ -359,7 +387,7 @@ The goal is integration, not language-model quality.
 
 ---
 
-# Core Invariants
+## Core Invariants
 
 The completed tokenizer should satisfy:
 
@@ -385,9 +413,9 @@ Re-encoding the tokenizer training corpus should reproduce its final training to
 
 ---
 
-# Key Data Structures
+## Key Data Structures
 
-## Vocabulary
+### Vocabulary
 
 ```text
 token ID → bytes
@@ -402,7 +430,7 @@ Example:
 
 Used to determine what each token represents and to decode token IDs.
 
-## Merge Rules
+### Merge Rules
 
 ```text
 (left token, right token) → new token
@@ -420,7 +448,7 @@ The two structures serve different purposes and should remain separate.
 
 ---
 
-# Vocabulary Size Tradeoff
+## Vocabulary Size Tradeoff
 
 A small vocabulary such as:
 
@@ -445,7 +473,7 @@ Tokenizer quality should be evaluated on held-out data rather than only on the c
 
 ---
 
-# Week 2 Final Deliverable
+## What I Wanted to Build
 
 A reusable byte-level BPE tokenizer capable of:
 
@@ -462,7 +490,7 @@ No external tokenizer implementation or pretrained vocabulary is required.
 
 ---
 
-# Completion Criteria
+## Final Check
 
 Week 2 is complete when you can explain and implement:
 

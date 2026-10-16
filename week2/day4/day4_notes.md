@@ -1,5 +1,9 @@
 # Week 2 — Day 4: Encoding with Learned BPE Rules
 
+My notes for [this day's code](main.py).
+See the [week-two plan](../week2_curriculum.md) for the files and
+the [architecture notes](../../docs/architecture.md) for how I used this later.
+
 ## Goal
 
 Use an already-trained BPE tokenizer to encode new text.
@@ -62,7 +66,9 @@ Later merges can therefore depend on tokens created by earlier merges.
 
 ## Simple Encoder
 
-The reference implementation applies each learned merge rule to the token sequence in order.
+The simple version applies each merge rule in order. My current `main.py` uses
+a heap to pick merges by priority and update nearby pairs. The complexity below
+is for the simple version, not a measurement of the heap version.
 
 Its approximate complexity is:
 

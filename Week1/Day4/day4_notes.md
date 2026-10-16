@@ -1,5 +1,9 @@
 # Day 4 Notes — Embeddings, Logits, Softmax, Cross-Entropy
 
+These are my notes for [this day's code](main.py).
+The numbers and limitations below belong to this early exercise, not the later GPT.
+See the [week-one plan](../week1_curriculum_exercises.md).
+
 ## 1. Embedding table `(V, C)`
 
 The embedding table has shape:
@@ -217,7 +221,8 @@ It only rearranges the same predictions so that each row of logits lines up with
 
 ## 8. Why random loss is approximately `ln(V)`
 
-A randomly initialized model usually starts close to guessing uniformly.
+Uniform predictions give a useful starting point for comparison.
+A random model does not have to predict uniformly.
 
 If there are `V` possible tokens:
 
@@ -249,11 +254,11 @@ we expect roughly:
 \ln(33) \approx 3.50
 \]
 
-Your Day 4 loss of about `3.60` is therefore reasonable for an untrained model.
+My recorded Day 4 loss of about `3.60` is therefore reasonable for an untrained model.
 
 ---
 
-# Full Day 4 Shape Flow
+## Full Day 4 Shape Flow
 
 ```text
 X
@@ -282,7 +287,7 @@ Y      (B, T)    -> (B*T)
 cross-entropy -> one scalar loss
 ```
 
-# What I Should Be Able to Explain
+## What I Should Be Able to Explain
 
 - Why the embedding table has shape `(V, C)`.
 - Why embedding lookup changes `(B, T)` into `(B, T, C)`.

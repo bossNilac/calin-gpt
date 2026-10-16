@@ -1,10 +1,34 @@
 # Week 1 — Foundations of a Tiny Language Model
 
-This week builds the smallest complete language-model pipeline from scratch.
+These are my original week-one exercises. They use a simple character model,
+before I added attention. See the [README](../README.md) and
+[project history](../docs/development.md) for what came later.
+
+## Where the Code Is
+
+| Stage | Code |
+| --- | --- |
+| Day 1 | [Character transitions](Day1/main.py) |
+| Day 2 | [Character vocabulary](day2/main.py) |
+| Day 3 | [Batches and splitting](Day3/main.py) |
+| Day 4 | [Embeddings and loss](Day4/main.py) |
+| Days 5 and 6 | [Training](day5/main.py) and [generation](day6/main.py) |
+| Day 7 | [Rebuild and shared helpers](day7/main.py) |
+
+The folder names use different capitalization: `Day1`, `Day3`, `Day4`, and lowercase `day2`,
+`day5`, `day6`, `day7`. Scripts load `sample`, `text.txt`, or
+`vocabulary.json` relative to their working directory, not the script location.
+For scripts with cross-week imports, keep the repository root on `PYTHONPATH`
+when running from a day directory. The [current training guide](../docs/training.md)
+uses root-based paths instead. The names below describe what I wanted to build:
+Day 3 uses `split_data`/`create_batch`; Day 7 supplies
+`split_dataset`/`x_y_batches`.
+
+My goal this week was to build a small language-model pipeline from scratch.
 
 The goal is **not** to build a transformer yet. The goal is to understand the full path from raw text to a trained model that can generate text.
 
-By the end of the week, you should be able to explain and rebuild:
+By the end, I wanted to explain and rebuild:
 
 ```text
 raw text
@@ -45,7 +69,7 @@ The point is to understand the basic training pipeline before adding transformer
 
 ---
 
-# Notation
+## Notation
 
 Use these symbols consistently:
 
@@ -70,13 +94,13 @@ loss               scalar
 
 ---
 
-# Day 1 — Next-Token Prediction
+## Day 1 — Next-Token Prediction
 
-## Goal
+### Goal
 
 Understand what a language model is actually trying to predict.
 
-## Concepts
+### Concepts
 
 Study:
 
@@ -101,7 +125,7 @@ l → l
 l → o
 ```
 
-## Mathematics
+### Mathematics
 
 Review conditional probability:
 
@@ -119,7 +143,7 @@ P(x1)
 
 You do not need advanced probability theory yet.
 
-## Implementation Exercise
+### Implementation Exercise
 
 Create a small character-transition language model.
 
@@ -144,7 +168,7 @@ P(c | a) = 0.3
 P(d | a) = 0.2
 ```
 
-## Experiment
+### Experiment
 
 Generate characters using the learned transition probabilities.
 
@@ -155,7 +179,7 @@ Try:
 
 Observe what kinds of repetition occur.
 
-## Tests
+### Tests
 
 For every starting character:
 
@@ -163,7 +187,7 @@ For every starting character:
 sum of probabilities of all possible next characters ≈ 1
 ```
 
-## Done When
+### Done When
 
 You can explain:
 
@@ -175,13 +199,13 @@ You can explain:
 
 ---
 
-# Day 2 — Vocabulary, Encoding, and Decoding
+## Day 2 — Vocabulary, Encoding, and Decoding
 
-## Goal
+### Goal
 
 Convert characters into integer token IDs and back.
 
-## Concepts
+### Concepts
 
 Study:
 
@@ -214,7 +238,7 @@ Then:
 "cab" → [2, 0, 1]
 ```
 
-## Implementation Exercise
+### Implementation Exercise
 
 Create:
 
@@ -229,7 +253,7 @@ Use a fixed JSON vocabulary.
 
 For the first version, it is fine to raise an error when a character is not in the vocabulary.
 
-## Tests
+### Tests
 
 The key test:
 
@@ -239,7 +263,7 @@ decode(encode(text)) == text
 
 for every string containing only valid vocabulary characters.
 
-## Done When
+### Done When
 
 You can explain:
 
@@ -250,13 +274,13 @@ You can explain:
 
 ---
 
-# Day 3 — Training Sequences and Batches
+## Day 3 — Training Sequences and Batches
 
-## Goal
+### Goal
 
 Turn the long token sequence into model-ready `X` and `Y` batches.
 
-## Concepts
+### Concepts
 
 Study:
 
@@ -282,7 +306,7 @@ Y = [4, 11, 11]
 
 `Y` is the original sequence shifted one position forward.
 
-## Why?
+### Why?
 
 At every position:
 
@@ -292,7 +316,7 @@ X[t] → predict Y[t]
 
 The task is always next-token prediction.
 
-## Implementation Exercise
+### Implementation Exercise
 
 Create:
 
@@ -312,7 +336,7 @@ Randomly select valid starting positions.
 
 Do not wrap around at the end of the dataset.
 
-## Dataset Split Exercise
+### Dataset Split Exercise
 
 Support:
 
@@ -340,7 +364,7 @@ means:
 [90%  : 100%]  validation
 ```
 
-## Tests
+### Tests
 
 For every sampled row:
 
@@ -357,7 +381,7 @@ X.dtype is integer
 Y.dtype is integer
 ```
 
-## Done When
+### Done When
 
 You can explain:
 
@@ -369,13 +393,13 @@ You can explain:
 
 ---
 
-# Day 4 — Embeddings, Logits, Softmax, and Cross-Entropy
+## Day 4 — Embeddings, Logits, Softmax, and Cross-Entropy
 
-## Goal
+### Goal
 
 Build the forward pass of the first neural next-token model.
 
-## Embeddings
+### Embeddings
 
 Create an embedding table:
 
@@ -401,7 +425,7 @@ Embedding lookup transforms:
 (B, T, C)
 ```
 
-## Output Projection
+### Output Projection
 
 Create output weights:
 
@@ -419,7 +443,7 @@ Matrix multiplication gives:
 
 The result is the logits tensor.
 
-## Logits
+### Logits
 
 For one prediction position:
 
@@ -437,7 +461,7 @@ It contains one raw score for every possible next token.
 
 Logits are not probabilities.
 
-## Softmax
+### Softmax
 
 Study:
 
@@ -451,7 +475,7 @@ Verify:
 sum(softmax(logits[b, t])) ≈ 1
 ```
 
-## Cross-Entropy
+### Cross-Entropy
 
 For one prediction:
 
@@ -463,7 +487,7 @@ Low correct-token probability means high loss.
 
 PyTorch cross-entropy expects raw logits, not manually softmaxed probabilities.
 
-## Flattening
+### Flattening
 
 Cross-entropy can treat all prediction positions as one large list:
 
@@ -481,9 +505,9 @@ Y:
 
 No values are recomputed. The tensor is only reshaped.
 
-## Random-Loss Sanity Check
+### Random-Loss Sanity Check
 
-A random model is roughly uniform:
+For uniform predictions (or small logits close to uniform):
 
 ```text
 P(correct) ≈ 1 / V
@@ -495,9 +519,9 @@ Therefore:
 loss ≈ ln(V)
 ```
 
-Use this as a sanity check.
+Use this as a baseline, not an exact requirement: randomly initialized logits need not be uniform.
 
-## Done When
+### Done When
 
 You can explain every transformation:
 
@@ -510,13 +534,13 @@ You can explain every transformation:
 
 ---
 
-# Day 5 — Backpropagation and Training
+## Day 5 — Backpropagation and Training
 
-## Goal
+### Goal
 
 Make the model parameters learn.
 
-## Concepts
+### Concepts
 
 Study:
 
@@ -532,7 +556,7 @@ Study:
 - validation loss
 - overfitting
 
-## Model Parameters
+### Model Parameters
 
 For this tiny model, the trainable parameters are:
 
@@ -543,7 +567,7 @@ output weights  (C, V)
 
 Batch data, logits, and loss are not persistent model parameters.
 
-## Backward Pass
+### Backward Pass
 
 Calling:
 
@@ -562,7 +586,7 @@ embedding_table.grad.shape == (V, C)
 weights.grad.shape == (C, V)
 ```
 
-## SGD
+### SGD
 
 Understand:
 
@@ -576,7 +600,7 @@ optimizer.step()
 
 updates the parameters.
 
-## Why `zero_grad()`?
+### Why `zero_grad()`?
 
 PyTorch accumulates gradients.
 
@@ -589,7 +613,7 @@ loss.backward()
 optimizer.step()
 ```
 
-## Training Loop Exercise
+### Training Loop Exercise
 
 Repeat for a fixed number of steps:
 
@@ -604,7 +628,7 @@ sample batch
 
 Create the model and optimizer once, outside the training loop.
 
-## Validation Exercise
+### Validation Exercise
 
 Every fixed number of training steps:
 
@@ -621,7 +645,7 @@ training loss
 validation loss
 ```
 
-## Overfitting
+### Overfitting
 
 Typical healthy pattern:
 
@@ -637,7 +661,7 @@ training loss ↓
 validation loss ↑
 ```
 
-## Done When
+### Done When
 
 You can explain:
 
@@ -650,13 +674,13 @@ You can explain:
 
 ---
 
-# Day 6 — Autoregressive Generation
+## Day 6 — Autoregressive Generation
 
-## Goal
+### Goal
 
 Use the trained model to generate text one token at a time.
 
-## Generation
+### Generation
 
 Training:
 
@@ -675,7 +699,7 @@ current token
 → repeat
 ```
 
-## Generation Shape
+### Generation Shape
 
 For this simple model, use:
 
@@ -714,7 +738,7 @@ Here:
 - `-1` selects the final token position
 - the `V` dimension remains
 
-## Greedy Decoding
+### Greedy Decoding
 
 Use:
 
@@ -726,7 +750,7 @@ This always chooses the highest-scoring token.
 
 Expect deterministic and potentially repetitive generation.
 
-## Sampling
+### Sampling
 
 Use:
 
@@ -739,7 +763,7 @@ logits
 
 Sampling produces more varied output.
 
-## Experiment
+### Experiment
 
 Generate 200 characters using:
 
@@ -754,7 +778,7 @@ With the current architecture, greedy decoding may fall into loops such as:
 the the the the ...
 ```
 
-## Why Is the Generated Text Bad?
+### Why Is the Generated Text Bad?
 
 The current model processes every token independently.
 
@@ -773,7 +797,7 @@ h → e
 
 while still producing globally incoherent text.
 
-## Done When
+### Done When
 
 You can explain:
 
@@ -787,13 +811,13 @@ You can explain:
 
 ---
 
-# Day 7 — Rebuild, Review, and Debug
+## Day 7 — Rebuild, Review, and Debug
 
-## Goal
+### Goal
 
 Reconstruct Week 1 without blindly copying previous code.
 
-## Rebuild Exercise
+### Rebuild Exercise
 
 From a blank file, rebuild:
 
@@ -812,7 +836,7 @@ generation
 
 Documentation is allowed. Copying your previous implementation line-by-line is not.
 
-## Shape Test
+### Shape Test
 
 Be able to write these from memory:
 
@@ -828,7 +852,7 @@ flattened Y        (B*T)
 loss               scalar
 ```
 
-## Debugging Exercise
+### Debugging Exercise
 
 Intentionally introduce shape errors.
 
@@ -856,7 +880,7 @@ cannot perform the intended matrix multiplication.
 
 Then read and interpret PyTorch's error message.
 
-## Final Experiment
+### Final Experiment
 
 Record:
 
@@ -878,7 +902,7 @@ Explain the difference.
 
 ---
 
-# Final Week 1 Questions
+## Final Week 1 Questions
 
 You should be able to answer these without looking at your implementation.
 
@@ -910,7 +934,7 @@ You should be able to answer these without looking at your implementation.
 
 ---
 
-# Final Week 1 Deliverable
+## Final Week 1 Deliverable
 
 A working character-level language-model project that can:
 
@@ -930,11 +954,11 @@ load text
 
 The generated text does not need to be good.
 
-The real success criterion is that you can explain why every major step exists and why every important tensor has its shape.
+What matters is being able to explain each step and each tensor shape.
 
 ---
 
-# What Comes Next
+## What Comes Next
 
 Week 1 intentionally ends with a model that only understands very local token relationships.
 

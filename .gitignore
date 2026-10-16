@@ -1,6 +1,10 @@
 __pycache__/
 *.py[cod]
 .venv/
+.venv*/
+results/*
+!results/benchmark.md
+.idea/
 data/cache/
 data/processed/
 data/debug/
