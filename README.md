@@ -116,6 +116,34 @@ It does not need the training dataset. The
 for CPU and GPU use. The trained files exist locally, but public download links
 have not been added yet.
 
+## Compare with GPT-2
+
+The benchmark evaluates my trained checkpoint and pretrained GPT-2 on the entire
+WikiText-103 raw test split. It uses the same 512-token window and 256-token stride
+for both models and reports a comparison table in [results/benchmark.md](results/benchmark.md).
+Lower **bits per byte (BPB)** is better. Token perplexity is also shown, but the
+models have different tokenizers, so those perplexities aren't directly comparable.
+
+On the gaming PC, with the final checkpoint and tokenizer in their usual paths:
+
+```bash
+python -m pip install -r requirements-benchmark.txt
+python -m src.benchmark --gpu
+```
+
+The optional dependency is only for loading GPT-2; the training setup stays the
+same. The first run downloads GPT-2 weights (roughly half a gigabyte) and the test
+split, then caches them. Both models are evaluated one at a time to reduce GPU
+memory use. The full test takes longer than the old 100,000-token check; progress
+is printed as it runs. No training happens.
+
+The output records model revisions, checkpoint step, hashes, byte/token counts,
+and the exact procedure. Both tokenizers must reconstruct the same test bytes.
+A context-only start marker lets both models score all text bytes. These settings
+make a comparison between these two runs, not a claim to reproduce published
+word-level WikiText scores. The full trained-model comparison still needs running
+on the gaming PC; adding the script doesn't establish a score.
+
 ## Data and References
 
 I trained on FineWeb-Edu, WikiText-103 raw, and Project Gutenberg books.

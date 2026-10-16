@@ -1,0 +1,2 @@
+# Optional reference-model dependency; install after the normal project setup.
+transformers==4.57.1
