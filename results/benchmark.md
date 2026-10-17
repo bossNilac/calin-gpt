@@ -76,16 +76,55 @@ I also have not checked for overlapping text from FineWeb or Gutenberg.
 
 ## Benchmark Results
 
-No separate benchmark results are recorded. The validation loss around
-2.9 is **not** a WikiText-103 test result. No test-set evaluation was run during
-this documentation check.
+Full official WikiText-103 test split: Calin-GPT versus pretrained GPT-2.
+**Bits per byte (BPB) is the comparison metric; lower is better.**
 
-The showcase is a set of generation samples to inspect, not a measured score.
-It does not prove factual knowledge, instruction following, or coding ability.
+| Model | Parameters | Scored tokens | Loss (nats/token) | Token perplexity | BPB ↓ |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Calin-GPT | 17,542,912 | 400,984 | 3.283374 | 26.665590 | **1.465187** |
+| GPT-2 | 124,439,808 | 287,644 | 3.343994 | 28.332053 | **1.070450** |
 
-If I choose to run a separate benchmark, I should record the checkpoint/tokenizer hashes,
-dataset revision and split, tokenization, context/window setup, number of scored
-tokens, how loss is averaged, and the command used.
+Calin-GPT / GPT-2 BPB ratio: **1.3688×**.
+Token loss and perplexity use each model's own tokenizer and should not be ranked
+across models. BPB normalizes their total negative log likelihood by the same bytes.
+
+| Run details | Value |
+| --- | --- |
+| Dataset | Salesforce/wikitext / wikitext-103-raw-v1 / official test split |
+| Dataset revision | `b08601e04326c79dfdd32d625aee71d232d685c3` |
+| Official test rows evaluated | 4,358 |
+| Evaluated UTF-8 bytes (both models) | 1,296,370 |
+| Test text SHA-256 | `696cca6b65a171b0a358a4be6732cdfdf2dd6164a32e20fd70e3c13fc4dfae83` |
+| Calin-GPT checkpoint | `checkpoints/final/checkpoint.pt` |
+| Completed optimizer steps | 20000 |
+| Checkpoint SHA-256 | `12b4b965227b17d12ee96e2ac512f0ea6c033f4840af01c9b5d69f4957733861` |
+| Custom tokenizer SHA-256 | `4c9b0aebd663c3912258e2de18ea29ccfa1680b7c69346e61821234e665630f3` |
+| Reference model | `openai-community/gpt2` |
+| Reference model/tokenizer revision | `607a30d783dfa663caf39e06633721c8d4cfcd7e` |
+| Context / stride (both models) | 512 / 256 tokens |
+| Device / PyTorch / Transformers | cuda / 2.3.1+cu118 / 4.57.1 |
+
+Method: join every official test row in dataset order with two newlines, preserving
+raw text and empty rows. Evaluate the entire resulting text, with no token cap,
+cleaning, or retraining. Each model uses its original tokenizer; exact UTF-8
+reconstruction is checked. Prepend that model's EOD/EOS as a context-only start
+marker so every text token and byte is scored, including the first. No EOD/EOS
+markers are inserted between test rows. Use overlapping input windows, scoring the first
+window fully and only new targets thereafter, including the final partial window.
+Each target is scored exactly once; positions restart at zero per window. Both
+models use the same token context/stride policy, but tokenizers give different
+byte spans. GPT-2 is deliberately limited to Calin-GPT's context for this comparison.
+
+Loss = summed next-token negative log likelihood / scored tokens;
+perplexity = exp(loss); BPB = summed negative log likelihood / (ln(2) × UTF-8 bytes).
+Both models run in full precision with model.eval(), torch.no_grad(), a fixed seed,
+deterministic PyTorch algorithms, TF32 disabled, and no compilation or KV cache.
+This is a reproducible comparison on a standard test dataset, not a reproduction
+of published word-level WikiText perplexity. Training/test overlap across the
+models' pretraining sources has not been exhaustively checked.
+
+Protocol reference: [strided sliding-window evaluation](https://huggingface.co/docs/transformers/perplexity).
+Command: `python -m src.benchmark --gpu`.
 
 ## File Hashes
 
@@ -97,3 +136,16 @@ tokens, how loss is averaged, and the command used.
 | `data/processed/documents.json` | `b78b61c35e2a0efe37138931703e0ef2e0d61dd4b567bc07c8ada366e96da131` |
 | `data/processed/train.bin` | `f7e1ebc9ab949c58665c5f7a241a0f6b6e6e5cfa09c432d91e3a6c47c53e23f3` |
 | `data/processed/val.bin` | `2a89bf5ac4359f909aa97f33be7a677ec0257755445e02f711aa7f451a6ad862` |
+
+## Reflection
+
+For me, the main achievement is going from small exercises to a trained model
+that I can compare with GPT-2 on the same test text. GPT-2 still does better:
+Calin-GPT's BPB is about 37% higher, even though its token perplexity looks lower.
+The tokenizers are different, so BPB is the useful comparison here.
+
+My model has about seven times fewer parameters, but that alone does not prove
+it is more efficient. The models also had different training data and budgets.
+I am happy to have built and trained this on a GTX 1080, while recognizing that
+one test set does not tell me how well it reasons, follows instructions, or gets
+facts right. This feels like a solid learning milestone, not a claim to beat GPT-2.

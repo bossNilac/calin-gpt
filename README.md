@@ -28,7 +28,8 @@ The checkpoint does not store losses, so the loss values above are approximate.
 The exact saved learning rate, dataset counts, and file hashes are in
 [the training record](results/benchmark.md).
 
-Training is finished. No separate benchmark results are recorded.
+Training is finished. The [WikiText-103 test comparison](results/benchmark.md#benchmark-results)
+now records results against pretrained GPT-2.
 The generation showcase lets me inspect samples; it is not a benchmark score.
 BF16 and `torch.compile` are optional code paths, but I have not documented tests
 showing they work. I also still need to publish the tokenizer and checkpoint so
@@ -141,8 +142,8 @@ The output records model revisions, checkpoint step, hashes, byte/token counts,
 and the exact procedure. Both tokenizers must reconstruct the same test bytes.
 A context-only start marker lets both models score all text bytes. These settings
 make a comparison between these two runs, not a claim to reproduce published
-word-level WikiText scores. The full trained-model comparison still needs running
-on the gaming PC; adding the script doesn't establish a score.
+word-level WikiText scores. The completed run and my
+[reflection on the results](results/benchmark.md#reflection) are in the benchmark report.
 
 ## Data and References
 
