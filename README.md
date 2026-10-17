@@ -32,8 +32,9 @@ Training is finished. The [WikiText-103 test comparison](results/benchmark.md#be
 now records results against pretrained GPT-2.
 The generation showcase lets me inspect samples; it is not a benchmark score.
 BF16 and `torch.compile` are optional code paths, but I have not documented tests
-showing they work. I also still need to publish the tokenizer and checkpoint so
-someone else can try the model without training it.
+showing they work. The tokenizer and checkpoint are available in the
+[20,000-step release](https://github.com/bossNilac/calin-gpt/releases/tag/calin-gpt-20k),
+so someone else can try the model without training it.
 
 ## Follow the Learning Journey
 
@@ -111,11 +112,11 @@ See the [training guide](docs/training.md) for real data, GPU setup, and resume.
 
 ## Trying the Trained Model
 
-Generation only needs the repo, settings, matching tokenizer, and checkpoint.
-It does not need the training dataset. The
-[inference instructions](docs/training.md#inference-handoff) explain the paths
-for CPU and GPU use. The trained files exist locally, but public download links
-have not been added yet.
+Download the tokenizer and checkpoint from the
+[20,000-step release](https://github.com/bossNilac/calin-gpt/releases/tag/calin-gpt-20k).
+The [download and inference guide](docs/model-release.md) has direct links,
+checksums, file locations, and CPU/GPU commands. Generation only needs the repo,
+settings, matching tokenizer, and checkpoint; it does not need the training dataset.
 
 ## Compare with GPT-2
 

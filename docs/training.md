@@ -209,9 +209,11 @@ It does not record file hashes or produce a benchmark score.
 
 ## Inference Handoff
 
-The trained checkpoint exists locally. Public tokenizer/checkpoint download links
-are still missing. Once those files are available, another person should only need
-the repo, compatible dependencies, config, tokenizer, and checkpoint to generate text.
+The trained checkpoint, tokenizer, config, and checksums are available in the
+[20,000-step release](https://github.com/bossNilac/calin-gpt/releases/tag/calin-gpt-20k).
+The [download and inference guide](model-release.md) gives direct links and commands.
+Another person only needs the repo, compatible dependencies, config, tokenizer,
+and checkpoint to generate text.
 
 For the default GPU command, use:
 
@@ -226,4 +228,4 @@ Otherwise CPU mode selects the tiny debug model's files. The saved model shape
 comes from the checkpoint, not the debug config.
 
 Inference needs no raw cache, binary dataset, or dataset metadata.
-For a public release, keep the config and file hashes with the download links.
+The release includes the config and file hashes alongside the model files.

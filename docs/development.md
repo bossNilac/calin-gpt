@@ -67,7 +67,8 @@ dataset sizes, learning rate, and file hashes.
 
 Finishing training does not tell me how good the model is. No separate benchmark
 results are recorded; that evaluation would be optional follow-up work. I have not
-documented BF16/compile checks or added public tokenizer/checkpoint downloads.
+documented BF16/compile checks. The tokenizer and checkpoint are now available
+through the [model release](model-release.md).
 Understanding and being able to repeat the work matter more to me than making
 the model bigger.
 
